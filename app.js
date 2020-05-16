@@ -12,38 +12,50 @@ const app = express();
 
 app.set('view engine', 'ejs');
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(express.static("public"));
 
+let posts = [];
 
-app.get("/", function (req, res) {
-
-  res.render("home", {startingContent: homeStartingContent});
-  
+app.get("/", function(req, res){
+  res.render("home", {
+    startingContent: homeStartingContent,
+    posts: posts
+    });
 });
 
 app.get("/about", function (req, res) {
 
-  res.render("about", {aboutContent: aboutContent});
-  
+  res.render("about", {
+    aboutContent: aboutContent
+  });
+
 });
 
 app.get("/contact", function (req, res) {
 
-  res.render("contact", {contactContent: contactContent});
-  
+  res.render("contact", {
+    contactContent: contactContent
+  });
+
 });
 
-app.get("/compose", function (req, res) {
-
+app.get("/compose", function(req, res){
   res.render("compose");
-  
 });
 
-app.post("/compose", function (req, res) {
-  req.body.postTitle
-  console.log(req.body.postTitle);
-  
+app.post("/compose", function(req, res){
+  const post = {
+    title: req.body.postTitle,
+    content: req.body.postBody
+  };
+
+  posts.push(post);
+
+  res.redirect("/");
+
 });
 
 
@@ -56,6 +68,6 @@ app.post("/compose", function (req, res) {
 
 
 
-app.listen(3000, function() {
+app.listen(3000, function () {
   console.log("Server started on port 3000");
 });
